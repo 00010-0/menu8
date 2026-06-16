@@ -441,6 +441,27 @@ if (!reduced){
     setTimeout(()=> logoWrap.classList.remove('show'), 1900);
   }, 15000);
 }
+
+/* ============ auto-ajuste: que nada se corte (cualquier resolución/stock) ============ */
+function fitBox(el){
+  if(!el) return;
+  el.style.transform = 'none';
+  el.style.transformOrigin = 'top center';
+  const sH = el.scrollHeight ? (el.clientHeight - 2) / el.scrollHeight : 1;
+  const sW = el.scrollWidth ? el.clientWidth / el.scrollWidth : 1;
+  const s = Math.min(1, sH, sW);
+  if (s < 0.998) el.style.transform = 'scale(' + Math.max(0.5, s) + ')';
+}
+function fitAll(){
+  ['col-weed','col-hash','col-ext','col-edibles','col-drinks']
+    .forEach(id => fitBox(document.getElementById(id)));
+}
+let fitT;
+addEventListener('resize', ()=>{ clearTimeout(fitT); fitT = setTimeout(fitAll, 150); });
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitAll);
+fitAll();
+setTimeout(fitAll, 400);
+setTimeout(fitAll, 1600);
 </script>
 </body>
 </html>
